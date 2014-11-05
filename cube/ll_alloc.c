@@ -1054,6 +1054,32 @@ static always_inline size_t size2fl(ssize_t size)
 }
 #else
 /* Magic code that converts size to entry in fast-list array */
+// [16 : 23]           n = 0
+// [24 : 39]           n = 1
+// [40 : 55]           n = 2
+// [56 : 71]           n = 3
+// [72 : 87]           n = 4
+// [88 : 119]          n = 5
+// [120 : 151]         n = 6
+// [152 : 183]         n = 7
+// [184 : 215]         n = 8
+// [216 : 279]         n = 9
+// [280 : 343]         n = 10
+// [344 : 407]         n = 11
+// [408 : 471]         n = 12
+// [472 : 599]         n = 13
+// [600 : 727]         n = 14
+// [728 : 855]         n = 15
+// [856 : 983]         n = 16
+// [984 : 1239]        n = 17
+// [1240 : 1495]       n = 18
+// [1496 : 1751]       n = 19
+// [1752 : 2007]       n = 20
+// [2008 : 2519]       n = 21
+// [2520 : 3031]       n = 22
+// [3032 : 3543]       n = 23
+// [3544 : 4055]       n = 24
+// [4056 : 5079]       n = 25
 static inline size_t size2fl(size_t size)
 {
 	size_t n;
@@ -3915,7 +3941,7 @@ static always_inline void *fast_alloc(atls *tl, size_t size)
 
 static void *slow_alloc_aux(atls *tl, size_t size)
 {
-	size_t n;
+	size_t n; // Seems like a bucket index.
 	unsigned tmask;
 
 	btree *b;
@@ -3977,6 +4003,7 @@ static void *slow_alloc_aux(atls *tl, size_t size)
 	}
 	else
 	{
+        // Give a look at high 32 bits.
 		tmask = (tl->q_mask >> 32) & (~0 << (n - 32));
 	}
 
